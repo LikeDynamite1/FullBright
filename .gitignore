@@ -1,41 +1,32 @@
-# Compiled Lua sources
-luac.out
+--fullbright script by LikeDynamite1 on GitHub
+pcall(function()
 
-# luarocks build files
-*.src.rock
-*.zip
-*.tar.gz
+	local l = game:GetService("Lighting")
+	l.Ambient = Color3.fromRGB(255, 255, 255)
+	l.Brightness = 1
+	l.FogEnd = 1e10
 
-# Object files
-*.o
-*.os
-*.ko
-*.obj
-*.elf
+	for i, v in pairs(l:GetDescendants()) do
+		if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("ColorCorrectionEffect") or v:IsA("SunRaysEffect") then
+			v.Enabled = false
+		end
+	end
 
-# Precompiled Headers
-*.gch
-*.pch
+	l.Changed:Connect(function()
+		l.Ambient = Color3.fromRGB(255, 255, 255)
+		l.Brightness = 1
+		l.FogEnd = 1e10
+	end)
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-*.def
-*.exp
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
+	spawn(function()
+		local char = game:GetService("Players").LocalPlayer.Character
+		while wait() do
+			repeat wait() until char ~= nil
+			if not char.HumanoidRootPart:FindFirstChildWhichIsA("PointLight") then
+				local ht = Instance.new("PointLight", char.HumanoidRootPart)
+				ht.Brightness = 1
+				ht.Range = 60
+			end
+		end
+	end)
+end)
